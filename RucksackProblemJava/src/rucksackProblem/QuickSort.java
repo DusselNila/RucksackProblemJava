@@ -4,14 +4,14 @@ package rucksackProblem;
  * Profitvektor und Gewichtsvektor werden gleichzeitig absteigend nach Profitdichte sortiert.
  */
 public class QuickSort {
-   
+	
    /**
     * Startmethode, die zum Sortieren aufgerufen wird, hier wird die Rekursion gestartet.
     *
     * @param x Profitvektor
     * @param y Gewichtsvektor
     */
-   public static void sortiere(int[] x, int[] y) {
+   public static void sortiere(long[] x, long[] y) {
       qSort(x,y, 0, x.length-1);
    }
     
@@ -26,7 +26,7 @@ public class QuickSort {
     * @param links linker Zeiger
     * @param rechts rechter Zeiger
     */
-   private static void qSort(int[] x, int[] y, int links, int rechts) {
+   private static void qSort(long[] x, long[] y, int links, int rechts) {
       if (links < rechts) {
          int i = partition(x,y,links,rechts);
          qSort(x,y,links,i-1);
@@ -45,17 +45,18 @@ public class QuickSort {
     * 
     * @return i Index, an dem sich die Zeiger überschneiden und das Pivotelement eingefügt wurde
     */
-   private static int partition(int[] x, int[] y, int links, int rechts) {
-      float pivot;
-      int i,j,help;
-      pivot = (float)x[rechts]/(float)y[rechts];               
+   private static int partition(long[] x, long[] y, int links, int rechts) {
+      double pivot;
+      int i,j;
+      long help;
+      pivot = (double)x[rechts]/(double)y[rechts];               
       i     = links;
       j     = rechts-1;
       
       // Suche von links ein Element, das kleiner ist als das Pivotelement 
       //  und tausche es mit dem rechten Index
       while(i<=j) {
-         if ((float)x[i]/(float)y[i] < pivot) {     
+         if ((double)x[i]/(double)y[i] < pivot) {     
             // tausche die Elemente des Profitvektors
             help = x[i]; 
             x[i] = x[j]; 

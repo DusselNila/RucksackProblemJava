@@ -14,7 +14,7 @@ public class greedyItem {
 	 * Variable wird in greedyKnapsack als d zurückgegeben und sonst als p'' verwendet.
 	 * Der gesamte Profit, der bei der Belegung von greedyKnapsack entsteht.
 	 */
-	float d;
+	double d;
 	
 	/**
 	 * Konstruktor des greedyItem
@@ -22,7 +22,7 @@ public class greedyItem {
 	 * @param k auch i
 	 * @param d auch p''
 	 */
-	public greedyItem(int k, float d){
+	public greedyItem(int k, double d){
 		this.k = k;
 		this.d = d;
 	}

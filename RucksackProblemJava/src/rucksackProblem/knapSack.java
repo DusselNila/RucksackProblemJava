@@ -1,5 +1,6 @@
 package rucksackProblem;
 import java.util.Random;
+import java.io.*; 
 
 /**
  * Die Klasse des eigentlichen Algorithmus für das Rucksackproblem
@@ -9,12 +10,12 @@ public class knapSack {
 	/** 
 	 * globaler Profitvektor
 	 */
-	int[] p;
+	long[] p;
 	
 	/**
 	 * globaler Gewichtsvektor
 	 */
-	int[] w;
+	long[] w;
 	
 	/** 
 	 * Der Vektor enthält Werte zwischen 0 (Gepäckstück wird nicht mitgenommen) und 1 (Gepäckstück 
@@ -22,7 +23,7 @@ public class knapSack {
 	 *   
 	 * Der globale Vektor x wird als Übergabe für die erste Rechnung in DoRec verwendet.
 	 */
-	float[] x;
+	double[] x;
 	
 	/** 
 	 * Der Vektor enthält Werte zwischen 0 (Gepäckstück wird nicht mitgenommen) und 1 (Gepäckstück 
@@ -31,7 +32,12 @@ public class knapSack {
 	 * Der globale Vektor xTilde wird für die temporäre bestmögliche Lösung (am Anfang die des
 	 *   greedy-Algorithmus über das gesamte Array) verwendet und am Ende auch für die endgültige Lösung genutzt.
 	 */
-	float[] xTilde;
+	double[] xTilde;
+	
+	/**
+	 * Variable, die nur zur Visualisierung, dass der Algorithmus noch läuft, dient
+	 */
+	long zaehler = 0;
 	
 	/**
 	 * Konstruktor eines Rucksack-Elements, er liest Profitvektor und Gewichtsvektor ein und 
@@ -42,12 +48,12 @@ public class knapSack {
 	 * @param p Profitvektor
 	 * @param w Gewichtsvektor
 	 */
-	public knapSack(int[] p, int[] w){
+	public knapSack(long[] p, long[] w){
 		this.p = p;
 		this.w = w;
 		
-		x = new float[p.length];
-		xTilde = new float[p.length];
+		x = new double[p.length];
+		xTilde = new double[p.length];
 		
 		QuickSort.sortiere(p, w);
 	}
@@ -74,19 +80,106 @@ public class knapSack {
 		}
 		QuickSort.sortiere(p,w);
 		
-		float[] pw = new float[n];
+		double[] pw = new double[n];
 		
 		for(int i = 0; i < n; i++){
 			
-			pw[i] = (float)p[i] / (float)w[i];
+			pw[i] = (double)p[i] / (double)w[i];
 		}*/
 		
 		//Test von knapSack mit dem Beispiel aus dem Skript
-		int[] tempP = {5, 12, 7, 12};
-		int[] tempW = {1, 3, 2, 4};
+		//Lösung 0110 -- funktioniert
+		/*long[] tempP = {5, 12, 7, 12};
+		long[] tempW = {1, 3, 2, 4};*/
 		
-		knapSack kS = new knapSack(tempP, tempW);
-		float[] ergebnis = kS.knapSackFunc(5);
+		//Lösung 1100 -- funktioniert
+		/*long[] tempP = {5, 16, 7, 12};
+		long[] tempW = {1, 4, 2, 4};*/
+		
+		//Lösung 1001 -- funktioniert
+		/*long[] tempP = {5, 4, 7, 12};
+		long[] tempW = {1, 1, 2, 4};*/
+		
+		//Lösung 1010 -- funktioniert
+		/*long[] tempP = {5, 4, 14, 12};
+		long[] tempW = {1, 1, 4, 4};*/
+		
+		//Lösung 1110 -- funktioniert (besserer Profit mit nicht vollem Gewicht 
+		/*long[] tempP = {10, 4, 3, 12};
+		long[] tempW = {2, 1, 1, 4};*/
+		
+		//Lösung 0101 -- funktioniert (Maximalgewicht = 6)
+		/*long[] tempP = {20, 12, 7, 9};
+		long[] tempW = {5, 3, 2, 3};*/
+		
+		//Lösung 0001 -- funktioniert
+		/*long[] tempP = {10, 18, 18, 20};
+		long[] tempW = {2, 4, 4, 5};*/
+		
+		/*knapSack kS = new knapSack(tempP, tempW);
+		double[] ergebnis = kS.knapSackFunc(5);*/
+		
+		
+		//zugesendete Testdaten
+		
+		//Auslesen der Daten
+		int counter = 0;
+		long[] tempW = {0};
+        long[] tempP = {0};
+        long maxGewicht = 0;
+		File file = new File(System.getProperty("user.dir") + "\\KnapSack.txt");
+
+        if (!file.canRead() || !file.isFile())
+            System.exit(0);
+
+        BufferedReader in = null;
+        
+        try {
+            in = new BufferedReader(new FileReader(file));
+            String zeile = null;
+            
+            //Maximalgewicht auslesen
+            String[] tempStringArray = in.readLine().trim().split("[\\:\\s+]");
+            maxGewicht = Long.parseLong(tempStringArray[2]);
+            
+            in.readLine();
+            
+            //Anzahl der Einträge zählen
+            while ((zeile = in.readLine()) != null && zeile != "") {
+                counter++;
+            }
+            
+            in.close();
+            in = new BufferedReader(new FileReader(file));
+            
+            in.readLine();
+            in.readLine();
+            tempW = new long[counter];
+            tempP = new long[counter];
+            counter = 0;
+            
+            //Gewicht- und Profitvektor befüllen
+            while ((zeile = in.readLine()) != null && zeile != "") {
+            	String[] tempArray = zeile.trim().split("[\\[\\,\\]\\s+]");
+            	tempW[counter] = Long.parseLong(tempArray[1]);
+            	tempP[counter] = Long.parseLong(tempArray[3]);
+            	counter++;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.exit(0);
+        } finally {
+            if (in != null)
+                try {
+                    in.close();
+                } catch (IOException e) {
+                	System.out.println("Ein Fehler mit der Datei ist aufgetreten.");
+                }
+        } 
+		
+        //Ausführen vom Rucksack Algorithmus
+        knapSack kS = new knapSack(tempP, tempW);
+		double[] ergebnis = kS.knapSackFunc(maxGewicht);
 		
 		//Ausgabe
 		for(int i = 0; i < ergebnis.length; i++){
@@ -110,7 +203,7 @@ public class knapSack {
 	 * 
 	 * @return xTilde Der Lösungsvektor des Rucksackproblems
 	 */
-	float[] knapSackFunc(int m){
+	double[] knapSackFunc(long m){
 		
 		greedyItem newItem = greedyKnapsack(0, p.length-1, xTilde, m);
 		xTilde[newItem.k] = 0;
@@ -132,15 +225,23 @@ public class knapSack {
 	 * @param pStrich momentaner Profit der Konstellation
 	 * @param localX lokales x, das momentan auf eine bessere Lösung untersucht wird
 	 */
-	void doRec(int end, int mStrich, float pStrich, float[] localX){
+	void doRec(int end, long mStrich, double pStrich, double[] localX){
 		/* localX wird geklont, da sonst mit der Referenz weitergearbeitet werden würde, wir
 		 *   benötigen jedoch ein neues Array mit den alten Werten, da mit localX ein weiteres
 		 *   Mal doRec aufgerufen wird.
 		 */
-		float[] tempX = localX.clone();
+		double[] tempX = localX.clone();
+		
+		//Visualisierung, das der Algorithmus noch läuft
+		zaehler++;
+		if(zaehler%2000000 == 0)
+			System.out.println(".");
+		
+		if(zaehler%20000000 == 0)
+			System.out.println(zaehler + " DoRec-Aufrufe");
 		
 		//berechne den derzeitigen bestmöglichen Gesamtprofit (zu Beginn der von GreedyKnapsack)
-		int pTilde = 0;
+		long pTilde = 0;
 		for(int k = 0; k < p.length; k++){
 			pTilde += p[k] * xTilde[k];
 		}
@@ -196,11 +297,11 @@ public class knapSack {
 	 * 
 	 * @return greedyItem mit dem letzten Index, der noch in den Rucksack gepackt wird, und dem Gesamtprofit
 	 */
-	greedyItem greedyKnapsack(int start, int end, float[] x, int m){
+	greedyItem greedyKnapsack(int start, int end, double[] x, long m){
 		
-		int c = 0;
+		long c = 0;
 		int k = 0;
-		float d = 0;
+		double d = 0;
 		
 		for(k = start; k <= end; k++){
 			c = c + w[k];
@@ -208,7 +309,7 @@ public class knapSack {
 				x[k] = 1;
 				d = d + p[k];
 			} else {
-				x[k] = ((float)(w[k] - (c - m)))/(float)w[k];
+				x[k] = ((double)(w[k] - (c - m)))/(double)w[k];
 				d = d + p[k]*x[k];
 				break;
 			}
