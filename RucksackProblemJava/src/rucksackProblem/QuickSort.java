@@ -1,7 +1,8 @@
 package rucksackProblem;
 /**
- * umgebauter Quicksort als effizienter/relativ leicht zu implementierender Suchalgorithmus.
- * Profitvektor und Gewichtsvektor werden gleichzeitig absteigend nach Profitdichte sortiert.
+ * Die Klasse enthält einen, für das Rucksackproblem umgebauten, Quicksort als effizienter/relativ 
+ *   leicht zu implementierender Suchalgorithmus.
+ * <br>Profitvektor und Gewichtsvektor werden gleichzeitig absteigend nach Profitdichte sortiert.
  */
 public class QuickSort {
 	
@@ -16,10 +17,10 @@ public class QuickSort {
    }
     
    /**
-    * übersichtliche Funktion, die für die rekursiven Aufrufe verantwortlich ist.
-    * 1. Nach Pivotelement sortieren
-    * 2. Quicksort für das linke Array aufrufen
-    * 3. Quicksort für das rechte Array aufrufen
+    * Die Funktion dient einem übersichtlichen rekursiven Aufruf.
+    * <br>1. Nach Pivotelement sortieren
+    * <br>2. Quicksort für das linke Array aufrufen
+    * <br>3. Quicksort für das rechte Array aufrufen
     *
     * @param x Profitvektor
     * @param y Gewichtsvektor
@@ -35,8 +36,8 @@ public class QuickSort {
    }
     
    /**
-    * partition nimmt den Quotient der Elemente, die ganz rechts stehen als Pivotelement und
-    *   sortiert den Profitvektor und den Gewichtsvektor gleichzeitig nach der Profitdichte
+    * Die Funktion nimmt den Quotient der Elemente, die ganz rechts stehen als Pivotelement und
+    *   sortiert den Profitvektor und den Gewichtsvektor gleichzeitig nach der Profitdichte.
     *
     * @param x Profitvektor
     * @param y Gewichtsvektor

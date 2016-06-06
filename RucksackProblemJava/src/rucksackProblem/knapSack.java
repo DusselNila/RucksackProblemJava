@@ -3,7 +3,7 @@ import java.util.Random;
 import java.io.*; 
 
 /**
- * Die Klasse des eigentlichen Algorithmus für das Rucksackproblem
+ * Die Klasse des eigentlichen Algorithmus für das Rucksackproblem.
  */
 public class knapSack {
 	
@@ -18,32 +18,32 @@ public class knapSack {
 	long[] w;
 	
 	/** 
-	 * Der Vektor enthält Werte zwischen 0 (Gepäckstück wird nicht mitgenommen) und 1 (Gepäckstück 
-	 *   wird mitgenommen), für den greedy-Algorithmus werden auch Brüche zugelassen.
-	 *   
 	 * Der globale Vektor x wird als Übergabe für die erste Rechnung in DoRec verwendet.
+	 * <br>
+	 * <br>Der Vektor enthält Werte zwischen 0 (Gepäckstück wird nicht mitgenommen) und 1 (Gepäckstück 
+	 *   wird mitgenommen), für den greedy-Algorithmus werden auch Brüche zugelassen.
 	 */
 	double[] x;
 	
 	/** 
-	 * Der Vektor enthält Werte zwischen 0 (Gepäckstück wird nicht mitgenommen) und 1 (Gepäckstück 
-	 *   wird mitgenommen), für den greedy-Algorithmus werden auch Brüche zugelassen.
-	 *   
 	 * Der globale Vektor xTilde wird für die temporäre bestmögliche Lösung (am Anfang die des
 	 *   greedy-Algorithmus über das gesamte Array) verwendet und am Ende auch für die endgültige Lösung genutzt.
+	 * <br>
+	 * <br>Der Vektor enthält Werte zwischen 0 (Gepäckstück wird nicht mitgenommen) und 1 (Gepäckstück 
+	 *   wird mitgenommen), für den greedy-Algorithmus werden auch Brüche zugelassen.
 	 */
 	double[] xTilde;
 	
 	/**
-	 * Variable, die nur zur Visualisierung, dass der Algorithmus noch läuft, dient
+	 * Variable, die nur zur Visualisierung, dass der Algorithmus noch läuft, dient.
 	 */
 	long zaehler = 0;
 	
 	/**
 	 * Konstruktor eines Rucksack-Elements, er liest Profitvektor und Gewichtsvektor ein und 
 	 *   sortiert diese.
-	 * 
-	 * Es wird angenommen, dass die beiden Vektoren gleich lang sind.
+	 * <br>
+	 * <br>Es wird angenommen, dass die beiden Vektoren gleich lang sind.
 	 *
 	 * @param p Profitvektor
 	 * @param w Gewichtsvektor
@@ -87,40 +87,107 @@ public class knapSack {
 			pw[i] = (double)p[i] / (double)w[i];
 		}*/
 		
-		//Test von knapSack mit dem Beispiel aus dem Skript
-		//Lösung 0110 -- funktioniert
-		/*long[] tempP = {5, 12, 7, 12};
-		long[] tempW = {1, 3, 2, 4};*/
+		//------------Testfälle des Rucksackproblems------------
+		/*Diese kleineren Beispiele sind bereits nach Profitdichte sortiert, 
+		   sodass sie leichter nachvollziehbar sind. */
 		
-		//Lösung 1100 -- funktioniert
-		/*long[] tempP = {5, 16, 7, 12};
-		long[] tempW = {1, 4, 2, 4};*/
+		double[] ergebnis;
+		knapSack kS;
 		
-		//Lösung 1001 -- funktioniert
-		/*long[] tempP = {5, 4, 7, 12};
-		long[] tempW = {1, 1, 2, 4};*/
+		//Profitdichte(5,4,3.5,3) Lösung 0110 -- funktioniert (Skript-Beispiel)
+		long[] tempP1 = {5, 12, 7, 12};
+		long[] tempW1 = {1, 3, 2, 4};
 		
-		//Lösung 1010 -- funktioniert
-		/*long[] tempP = {5, 4, 14, 12};
-		long[] tempW = {1, 1, 4, 4};*/
+        kS = new knapSack(tempP1, tempW1);
+		ergebnis = kS.knapSackFunc(5);
 		
-		//Lösung 1110 -- funktioniert (besserer Profit mit nicht vollem Gewicht 
-		/*long[] tempP = {10, 4, 3, 12};
-		long[] tempW = {2, 1, 1, 4};*/
+		System.out.print("erwartete Lösung: 0110 -- ");
+		for(int i = 0; i < ergebnis.length; i++){
+			System.out.print(ergebnis[i] + " ");
+		}
+		System.out.println();
 		
-		//Lösung 0101 -- funktioniert (Maximalgewicht = 6)
-		/*long[] tempP = {20, 12, 7, 9};
-		long[] tempW = {5, 3, 2, 3};*/
+		//Profitdichte(5,4,3.5,3) Lösung 1100 -- funktioniert (greedy-Lösung ist bester Profit)
+		long[] tempP2 = {5, 16, 7, 12};
+		long[] tempW2 = {1, 4, 2, 4};
 		
-		//Lösung 0001 -- funktioniert
-		/*long[] tempP = {10, 18, 18, 20};
-		long[] tempW = {2, 4, 4, 5};*/
+        kS = new knapSack(tempP2, tempW2);
+		ergebnis = kS.knapSackFunc(5);
 		
-		/*knapSack kS = new knapSack(tempP, tempW);
-		double[] ergebnis = kS.knapSackFunc(5);*/
+		System.out.print("erwartete Lösung: 1100 -- ");
+		for(int i = 0; i < ergebnis.length; i++){
+			System.out.print(ergebnis[i] + " ");
+		}
+		System.out.println();
+		
+		//Profitdichte(5,4,3.5,3) Lösung 1001 -- funktioniert
+		long[] tempP3 = {5, 4, 7, 12};
+		long[] tempW3 = {1, 1, 2, 4};
+
+        kS = new knapSack(tempP3, tempW3);
+		ergebnis = kS.knapSackFunc(5);
+		
+		System.out.print("erwartete Lösung: 1001 -- ");
+		for(int i = 0; i < ergebnis.length; i++){
+			System.out.print(ergebnis[i] + " ");
+		}
+		System.out.println();
+		
+		//Profitdichte(5,4,3.5,3) Lösung 1010 -- funktioniert
+		long[] tempP4 = {5, 4, 14, 12};
+		long[] tempW4 = {1, 1, 4, 4};
+
+        kS = new knapSack(tempP4, tempW4);
+		ergebnis = kS.knapSackFunc(5);
+		
+		System.out.print("erwartete Lösung: 1010 -- ");
+		for(int i = 0; i < ergebnis.length; i++){
+			System.out.print(ergebnis[i] + " ");
+		}
+		System.out.println();
+		
+		//Profitdichte(5,4,3,3) Lösung 1110 -- funktioniert (besserer Profit mit nicht vollem Gewicht)
+		long[] tempP5 = {10, 4, 3, 12};
+		long[] tempW5 = {2, 1, 1, 4};
+
+        kS = new knapSack(tempP5, tempW5);
+		ergebnis = kS.knapSackFunc(5);
+		
+		System.out.print("erwartete Lösung: 1110 -- ");
+		for(int i = 0; i < ergebnis.length; i++){
+			System.out.print(ergebnis[i] + " ");
+		}
+		System.out.println();
+		
+		//Profitdichte(4,4,3.5,3) Lösung 0101 -- funktioniert (Maximalgewicht = 6)
+		long[] tempP6 = {20, 12, 7, 9};
+		long[] tempW6 = {5, 3, 2, 3};
+
+        kS = new knapSack(tempP6, tempW6);
+		ergebnis = kS.knapSackFunc(6);
+		
+		System.out.print("erwartete Lösung: 0101 -- ");
+		for(int i = 0; i < ergebnis.length; i++){
+			System.out.print(ergebnis[i] + " ");
+		}
+		System.out.println();
+		
+		//Profitdichte(5,4.5,4.5,4)Lösung 0001 -- funktioniert
+		long[] tempP7 = {10, 18, 18, 20};
+		long[] tempW7 = {2, 4, 4, 5};
+		
+
+        kS = new knapSack(tempP7, tempW7);
+		ergebnis = kS.knapSackFunc(5);
+		
+		System.out.print("erwartete Lösung: 0001 -- ");
+		for(int i = 0; i < ergebnis.length; i++){
+			System.out.print(ergebnis[i] + " ");
+		}
+		System.out.println();
 		
 		
-		//zugesendete Testdaten
+		//zugesendete Testdaten (noch nicht sortiert)
 		
 		//Auslesen der Daten
 		int counter = 0;
@@ -178,8 +245,8 @@ public class knapSack {
         } 
 		
         //Ausführen vom Rucksack Algorithmus
-        knapSack kS = new knapSack(tempP, tempW);
-		double[] ergebnis = kS.knapSackFunc(maxGewicht);
+        kS = new knapSack(tempP, tempW);
+		ergebnis = kS.knapSackFunc(maxGewicht);
 		
 		//Ausgabe
 		for(int i = 0; i < ergebnis.length; i++){
@@ -191,12 +258,12 @@ public class knapSack {
 	/**
 	 * Startmethode, die für die Lösung des Rucksackproblems aufgerufen wird.
 	 * 
-	 * Hier wird nur das Maximalgewicht übergeben, da die anderen globalen Vektoren bei 
+	 * <br>Hier wird nur das Maximalgewicht übergeben, da die anderen globalen Vektoren bei 
 	 *   der Initialisierung eines Rucksack-Elements festgelegt werden.
-	 *   
-	 * Zunächst wird als temporäre bestmögliche Lösung der greedy-Algorithmus über das gesamte
+	 * <br>  
+	 * <br>Zunächst wird als temporäre bestmögliche Lösung der greedy-Algorithmus über das gesamte
 	 *   Array ausgeführt. Hierbei wird xTilde als globale Variable modifiziert.
-	 * Danach wird die Rekursion über doRec gestartet, um systematisch nach besseren Lösungen/
+	 * <br>Danach wird die Rekursion über doRec gestartet, um systematisch nach besseren Lösungen/
 	 *   der optimalen Lösung zu suchen.
 	 *
 	 * @param m Maximalgewicht
@@ -213,10 +280,10 @@ public class knapSack {
 	
 	/**
 	 * Rekursiver Algorithmus um systematisch nach einer besseren/ der optimalen Lösung zu suchen.
-	 * 
-	 * In doRec wird immer eine Stelle des Vektors festgelegt und anschließend doRec mit dem
+	 * <br>
+	 * <br>In doRec wird immer eine Stelle des Vektors festgelegt und anschließend doRec mit dem
 	 *   restlichen Vektor aufgerufen. Somit wir jede effiziente Möglichkeit einmal getestet. 
-	 * Der Test wird für die momentane Konstellation abgebrochen, falls 1. der Index end außerhalb 
+	 * <br>Der Test wird für die momentane Konstellation abgebrochen, falls 1. der Index end außerhalb 
 	 *   des Arrays liegt, 2. der Gesamtprofit nicht mehr größer werden kann, als der, der 
 	 *   bisherigen bestmöglichen Lösung oder 3. das nächste Element nicht mehr in den Rucksack passt.
 	 *
@@ -286,8 +353,8 @@ public class knapSack {
 	}
 	
 	/**
-	 * greedy-Algorithmus für das Rucksackproblem
-	 * Er nimmt die ersten Elemente, die bereits absteigend nach Profitdichte sortiert sind,
+	 * Der greedy-Algorithmus für das fraktale Rucksackproblem.
+	 * <br>Er nimmt die ersten Elemente, die bereits absteigend nach Profitdichte sortiert sind,
 	 *   bis die Maximalmasse erreicht ist. Auch das letzte Element wird als Bruch mitgezählt.
 	 *
 	 * @param start Startindex, ab dem der greedy-Algorithmus durchgeführt werden soll
