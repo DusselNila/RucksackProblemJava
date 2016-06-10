@@ -7,15 +7,10 @@ import java.io.*;
  */
 public class knapSack {
 	
-	/** 
-	 * globaler Profitvektor
-	 */
-	long[] p;
-	
 	/**
-	 * globaler Gewichtsvektor
+	 * Ein Array von Gepäckstücken mit Profit und Gewicht
 	 */
-	long[] w;
+	luggage[] items;
 	
 	/** 
 	 * Der globale Vektor x wird als Übergabe für die erste Rechnung in DoRec verwendet.
@@ -40,8 +35,8 @@ public class knapSack {
 	long zaehler = 0;
 	
 	/**
-	 * Konstruktor eines Rucksack-Elements, er liest Profitvektor und Gewichtsvektor ein und 
-	 *   sortiert diese.
+	 * Konstruktor eines Rucksack-Elements, er liest Profit- und Gewichtsvektor ein, erstellt 
+	 *   Gepäckstücke für die einzelnen Werte und sortiert diese.
 	 * <br>
 	 * <br>Es wird angenommen, dass die beiden Vektoren gleich lang sind.
 	 *
@@ -49,13 +44,17 @@ public class knapSack {
 	 * @param w Gewichtsvektor
 	 */
 	public knapSack(long[] p, long[] w){
-		this.p = p;
-		this.w = w;
+		
+		//erstelle Gepäckstücke für Proft und Gewicht
+		items = new luggage[p.length];
+		for(int i = 0; i < p.length; i++){
+			items[i] = new luggage(p[i],w[i]);
+		}
 		
 		x = new double[p.length];
 		xTilde = new double[p.length];
 		
-		QuickSort.sortiere(p, w);
+		QuickSort.sortiere(items);
 	}
 	
 	/**
@@ -67,25 +66,31 @@ public class knapSack {
 		
 		//Test QuickSort
 		/*Random r = new Random();
+		int n = 100;
 		
-		for(int i = 0; i < kS.n; i++){
-			p[i] = r.nextInt(300);
-			if(p[i] == 0){
-				p[i] = 1;
+		long[] tempPQ = new long[n];
+		long[] tempWQ = new long[n];
+		luggage[] tempL = new luggage[n];
+		
+		for(int i = 0; i < n; i++){
+			tempPQ[i] = r.nextInt(300);
+			if(tempPQ[i] == 0){
+				tempPQ[i] = 1;
 			}
-			w[i] = r.nextInt(300);
-			if(w[i] == 0){
-				w[i] = 1;
+			tempWQ[i] = r.nextInt(300);
+			if(tempWQ[i] == 0){
+				tempWQ[i] = 1;
 			}
+			tempL[i] = new luggage(tempPQ[i], tempWQ[i]);
 		}
-		QuickSort.sortiere(p,w);
+		
+		QuickSort.sortiere(tempL);
 		
 		double[] pw = new double[n];
 		
 		for(int i = 0; i < n; i++){
-			
-			pw[i] = (double)p[i] / (double)w[i];
-		}*/
+			pw[i] = (double)tempL[i].getP() / (double)tempL[i].getW();
+		}
 		
 		//------------Testfälle des Rucksackproblems------------
 		/*Diese kleineren Beispiele sind bereits nach Profitdichte sortiert, 
@@ -272,7 +277,7 @@ public class knapSack {
 	 */
 	double[] knapSackFunc(long m){
 		
-		greedyItem newItem = greedyKnapsack(0, p.length-1, xTilde, m);
+		greedyItem newItem = greedyKnapsack(0, items.length-1, xTilde, m);
 		xTilde[newItem.k] = 0;
 		doRec(0,m,0,x);
 		return xTilde;	
@@ -309,18 +314,18 @@ public class knapSack {
 		
 		//berechne den derzeitigen bestmöglichen Gesamtprofit (zu Beginn der von GreedyKnapsack)
 		long pTilde = 0;
-		for(int k = 0; k < p.length; k++){
-			pTilde += p[k] * xTilde[k];
+		for(int k = 0; k < items.length; k++){
+			pTilde += items[k].getP() * xTilde[k];
 		}
 		
 		int j = end;
 		//liegt der Index j noch im Array
-		if(j <= (p.length-1)){
+		if(j <= (items.length-1)){
 			
 			/* führe greedyKnapsack mit dem noch übrigen Maximalgewicht ab dem Index j aus,
 			 *   um den Teilprofit zu errechnen
 			 */
-			greedyItem newItem = greedyKnapsack(j, p.length-1, tempX, mStrich);
+			greedyItem newItem = greedyKnapsack(j, items.length-1, tempX, mStrich);
 			
 			/* lohnt es sich den Vektor weiter zu überprüfen? 
 			 *   (ist bisheriger Profit + Teilprofit > Gesamtprofit der aktuellen bestmöglichen Lösung ?)
@@ -334,14 +339,14 @@ public class knapSack {
 				/* lohnt es sich den Vektor weiter zu überprüfen?
 				 *   (passt das j-te Element noch in den Rucksack?)
 				 */
-				if(w[j] <= mStrich){
+				if(items[j].getW() <= mStrich){
 					
 					/* überprüfe den Vektor weiter, indem das j-te Element gleich 1 gesetzt, 
 					 *   das Maximalgewicht um das Gewicht des j-ten Element verringert und
 					 *   der bisherige Profit um den Profit des j-ten Element erhöht wird.
 					 */
 					tempX[j] = 1;
-					doRec(j+1, mStrich-w[j], pStrich+p[j], tempX);
+					doRec(j+1, mStrich-items[j].getW(), pStrich+items[j].getP(), tempX);
 					
 				}
 			}
@@ -371,13 +376,13 @@ public class knapSack {
 		double d = 0;
 		
 		for(k = start; k <= end; k++){
-			c = c + w[k];
+			c = c + items[k].getW();
 			if(c <= m){
 				x[k] = 1;
-				d = d + p[k];
+				d = d + items[k].getP();
 			} else {
-				x[k] = ((double)(w[k] - (c - m)))/(double)w[k];
-				d = d + p[k]*x[k];
+				x[k] = ((double)(items[k].getW() - (c - m)))/(double)items[k].getW();
+				d = d + items[k].getP()*x[k];
 				break;
 			}
 		}
