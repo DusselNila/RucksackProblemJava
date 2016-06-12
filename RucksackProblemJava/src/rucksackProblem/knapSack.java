@@ -194,6 +194,8 @@ public class knapSack {
 		
 		//zugesendete Testdaten (noch nicht sortiert)
 		
+		long timeStart = System.currentTimeMillis();
+		
 		//Auslesen der Daten
 		int counter = 0;
 		long[] tempW = {0};
@@ -257,6 +259,11 @@ public class knapSack {
 		for(int i = 0; i < ergebnis.length; i++){
 			System.out.print(ergebnis[i] + " ");
 		}
+		
+		//Laufzeit anzeigen
+		long timeEnd = System.currentTimeMillis();
+		System.out.println();
+        System.out.println("Laufzeit: " + (timeEnd - timeStart)/60000+ " Minuten " + ((timeEnd - timeStart)%60000)/1000 + " Sekunden " + (timeEnd - timeStart)%1000 + " Millisekunden"); 
 	}
 	
 	
